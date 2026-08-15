@@ -5,6 +5,7 @@ const LoadingScreen = () => (
                 <div className="restaurant-skeleton" key={card}>
                     <div className="skeleton-image" />
                     <div className="skeleton-line skeleton-title" />
+                    <div className="skeleton-line skeleton-rate" />
                     <div className="skeleton-line skeleton-detail" />
                     <div className="skeleton-line skeleton-detail short" />
                 </div>
