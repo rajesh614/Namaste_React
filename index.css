@@ -192,3 +192,20 @@
         height: 72px;
     }
 }
+
+.test-infinite-scroll {
+    padding: 24px 140px;
+}
+
+.test-infinite-scroll > h1,
+.test-infinite-scroll > p {
+    font-family: poppins, sans-serif;
+}
+
+.test-load-trigger {
+    min-height: 64px;
+    display: grid;
+    place-items: center;
+    color: #5e5d5d;
+    font-family: poppins, sans-serif;
+}
