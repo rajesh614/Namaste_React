@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import RestaurantCard from "./RestaurantCard";
-import LoadingScreen from "./LoadingScreen";
+import RestaurantCard from "../components/RestaurantCard";
+import LoadingScreen from "../components/LoadingScreen";
+import SearchBar from "../components/SearchBar";
 
 // Number of restaurants to load each time user scrolls to bottom
 const PAGE_SIZE = 4;
@@ -23,24 +24,26 @@ const Body = () => {
 
     const fetchData = async () => {
         try {
+            const apiUrl =
+                "https://www.swiggy.com/dapi/restaurants/list/v5?lat=20.344743&lng=85.80381799999999&page_type=DESKTOP_WEB_LISTING";
             const swiggydata = await fetch(
-                "https://www.swiggy.com/dapi/restaurants/list/v5?lat=20.344743&lng=85.80381799999999&page_type=DESKTOP_WEB_LISTING",
+                "https://corsproxy.io/?url=" + encodeURIComponent(apiUrl),
             );
             const restaurantList = await swiggydata.json();
             console.log("restaurantList", JSON.stringify(restaurantList));
             setListOfRestaurants(
                 swiggydata
                     ? restaurantList.data.cards[1]?.card?.card?.gridElements
-                          ?.infoWithStyle?.restaurants
+                        ?.infoWithStyle?.restaurants
                     : restaurantList?.data?.data?.cards[1]?.card?.card
-                          ?.gridElements?.infoWithStyle?.restaurants,
+                        ?.gridElements?.infoWithStyle?.restaurants,
             );
             setFilteredRestaurant(
                 swiggydata
                     ? restaurantList.data.cards[1]?.card?.card?.gridElements
-                          ?.infoWithStyle?.restaurants
+                        ?.infoWithStyle?.restaurants
                     : restaurantList?.data?.data?.cards[1]?.card?.card
-                          ?.gridElements?.infoWithStyle?.restaurants,
+                        ?.gridElements?.infoWithStyle?.restaurants,
             );
         } catch (error) {
             console.error("Error fetching restaurant data:", error);
@@ -98,37 +101,7 @@ const Body = () => {
 
     return (
         <div className="body">
-            <div className="search-bar">
-                <div className="search-input-wrapper">
-                    <svg
-                        className="search-icon"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true">
-                        <path d="m21 21-4.35-4.35m1.35-5.15a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z" />
-                    </svg>
-                    <input
-                        className="search-input"
-                        type="text"
-                        placeholder="Search for restaurants or cuisines"
-                        aria-label="Search for restaurants or cuisines"
-                        onChange={(e) => {
-                            const searchText = e.target.value.toLowerCase();
-                            const filteredRestaurants =
-                                listOfRestaurants?.filter(
-                                    (restaurant) =>
-                                        restaurant?.info?.name
-                                            .toLowerCase()
-                                            .includes(searchText) ||
-                                        restaurant?.info?.cuisines
-                                            .join(", ")
-                                            .toLowerCase()
-                                            .includes(searchText),
-                                );
-                            setFilteredRestaurant(filteredRestaurants);
-                        }}
-                    />
-                </div>
-            </div>
+            <SearchBar listOfRestaurants={listOfRestaurants} setFilteredRestaurant={setFilteredRestaurant} placeholder="Search for restaurants or cuisines" />
             <div className="filter">
                 <button
                     className="filter-button"
@@ -183,8 +156,8 @@ const Body = () => {
                     {isLoadingMore
                         ? "Loading more restaurants..."
                         : hasMore
-                          ? "Scroll down to load more"
-                          : "You have reached the end"}
+                            ? "Scroll down to load more"
+                            : "You have reached the end"}
                 </div>
             </div>
         </div>
